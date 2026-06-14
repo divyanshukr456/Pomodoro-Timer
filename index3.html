@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow - Pomodoro Timer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles-container" id="particlesContainer"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                🎯 StudyFlow
+            </div>
+            <div class="header-controls">
+                <button class="btn-icon" id="settingsBtn" title="Settings">⚙️</button>
+                <button class="btn-icon" id="themeToggle" title="Toggle Dark Mode">🌙</button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-grid">
+            <!-- Left: Timer Section -->
+            <div class="timer-section">
+                <!-- Quote Section -->
+                <div class="quote-section">
+                    <div class="quote-text" id="quoteText">"The only way to do great work is to love what you do." — Steve Jobs</div>
+                </div>
+
+                <!-- Timer Card -->
+                <div class="timer-card">
+                    <div class="session-label" id="sessionLabel">Study Session</div>
+                    
+                    <div class="timer-display">
+                        <svg class="progress-ring" viewBox="0 0 300 300">
+                            <circle cx="150" cy="150" r="140" class="progress-ring-circle" id="progressCircle"></circle>
+                        </svg>
+                        <div class="timer-text" id="timerDisplay">25:00</div>
+                    </div>
+
+                    <!-- Session Type Buttons -->
+                    <div class="session-types">
+                        <button class="session-btn active" data-session="study">Study</button>
+                        <button class="session-btn" data-session="short-break">Short Break</button>
+                        <button class="session-btn" data-session="long-break">Long Break</button>
+                    </div>
+
+                    <!-- Control Buttons -->
+                    <div class="timer-controls">
+                        <button class="btn-primary" id="startBtn">▶ Start</button>
+                        <button class="btn-secondary" id="pauseBtn" disabled>⏸ Pause</button>
+                        <button class="btn-secondary" id="resetBtn">↻ Reset</button>
+                        <button class="btn-secondary" id="skipBtn">⏭ Skip</button>
+                    </div>
+                </div>
+
+                <!-- Music Player Section -->
+                <div class="music-section">
+                    <div class="music-title">🎵 Focus Music</div>
+                    <div class="music-input-group">
+                        <input 
+                            type="text" 
+                            class="music-input" 
+                            id="youtubeUrl" 
+                            placeholder="Paste YouTube URL here..."
+                        >
+                        <button class="btn-load" id="loadMusicBtn">Load</button>
+                    </div>
+                    <div id="musicPlayerContainer" class="music-player"></div>
+                </div>
+            </div>
+
+            <!-- Right: Stats Section -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="sessionsCompleted">0</div>
+                    <div class="stat-label">Sessions Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="sessionsRemaining">0</div>
+                    <div class="stat-label">Remaining</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="focusTime">0h</div>
+                    <div class="stat-label">Focus Time Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="streakCounter">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalSessions">0</div>
+                    <div class="stat-label">Total Sessions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                Settings
+                <button class="modal-close" id="closeModal">✕</button>
+            </div>
+
+            <!-- Study Duration -->
+            <div class="setting-group">
+                <div class="setting-label">Study Duration</div>
+                <div class="setting-options">
+                    <button class="setting-option selected" data-setting="studyDuration" data-value="25">25 min</button>
+                    <button class="setting-option" data-setting="studyDuration" data-value="30">30 min</button>
+                    <button class="setting-option" data-setting="studyDuration" data-value="40">40 min</button>
+                </div>
+                <input 
+                    type="number" 
+                    class="custom-input" 
+                    id="customStudy" 
+                    placeholder="Or enter custom minutes"
+                    min="1"
+                    max="120"
+                >
+            </div>
+
+            <!-- Short Break Duration -->
+            <div class="setting-group">
+                <div class="setting-label">Short Break Duration</div>
+                <div class="setting-options">
+                    <button class="setting-option selected" data-setting="shortBreakDuration" data-value="5">5 min</button>
+                    <button class="setting-option" data-setting="shortBreakDuration" data-value="10">10 min</button>
+                </div>
+                <input 
+                    type="number" 
+                    class="custom-input" 
+                    id="customShortBreak" 
+                    placeholder="Or enter custom minutes"
+                    min="1"
+                    max="60"
+                >
+            </div>
+
+            <!-- Long Break Duration -->
+            <div class="setting-group">
+                <div class="setting-label">Long Break Duration</div>
+                <div class="setting-options">
+                    <button class="setting-option selected" data-setting="longBreakDuration" data-value="15">15 min</button>
+                    <button class="setting-option" data-setting="longBreakDuration" data-value="20">20 min</button>
+                    <button class="setting-option" data-setting="longBreakDuration" data-value="30">30 min</button>
+                </div>
+                <input 
+                    type="number" 
+                    class="custom-input" 
+                    id="customLongBreak" 
+                    placeholder="Or enter custom minutes"
+                    min="1"
+                    max="120"
+                >
+            </div>
+
+            <!-- Sessions Goal -->
+            <div class="setting-group">
+                <div class="setting-label">Daily Sessions Goal</div>
+                <div class="setting-options">
+                    <button class="setting-option" data-setting="sessionsGoal" data-value="4">4 Sessions</button>
+                    <button class="setting-option selected" data-setting="sessionsGoal" data-value="8">8 Sessions</button>
+                    <button class="setting-option" data-setting="sessionsGoal" data-value="12">12 Sessions</button>
+                </div>
+                <input 
+                    type="number" 
+                    class="custom-input" 
+                    id="customGoal" 
+                    placeholder="Or enter custom goal"
+                    min="1"
+                    max="50"
+                >
+            </div>
+
+            <!-- Sound Alerts -->
+            <div class="setting-group">
+                <div class="setting-label">Sound Alerts</div>
+                <div class="setting-options">
+                    <button class="setting-option selected" data-setting="soundAlerts" data-value="true">Enabled</button>
+                    <button class="setting-option" data-setting="soundAlerts" data-value="false">Disabled</button>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="setting-group">
+                <div class="setting-label">Browser Notifications</div>
+                <div class="setting-options">
+                    <button class="setting-option selected" data-setting="notifications" data-value="true">Enabled</button>
+                    <button class="setting-option" data-setting="notifications" data-value="false">Disabled</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
